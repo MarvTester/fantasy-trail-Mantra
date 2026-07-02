@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fantasy Trail Race</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8f7f4;color:#1a1a18;min-height:100vh;padding:1.5rem 1rem;}
+.app{max-width:700px;margin:0 auto;}
+h1{font-size:24px;font-weight:600;color:#1a1a18;margin-bottom:4px;}
+.sub{font-size:14px;color:#5f5e5a;margin-bottom:1.5rem;}
+.slabel{font-size:11px;font-weight:600;color:#888780;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+input[type=text],input[type=number],input[type=password],select{font-size:14px;height:38px;padding:0 10px;border-radius:8px;border:1px solid #d3d1c7;background:#f8f7f4;color:#1a1a18;flex:1;min-width:80px;outline:none;}
+input[type=text]:focus,input[type=number]:focus,input[type=password]:focus,select:focus{border-color:#888780;background:#fff;}
+.btn{height:38px;padding:0 16px;font-size:14px;font-weight:500;border-radius:8px;border:1px solid #d3d1c7;background:transparent;color:#1a1a18;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.btn:hover{background:#f1efe8;}
+.btn.primary{background:#1a1a18;color:#fff;border-color:#1a1a18;}
+.btn.primary:hover{background:#2c2c2a;}
+.btn.danger{color:#a32d2d;border-color:#f09595;}
+.btn.danger:hover{background:#fcebeb;}
+.tab-row{display:flex;gap:4px;margin-bottom:1rem;flex-wrap:wrap;}
+.tab{height:36px;padding:0 14px;font-size:13px;border-radius:8px;border:1px solid #e8e6e0;background:transparent;color:#888780;cursor:pointer;transition:all .15s;}
+.tab:hover{background:#f1efe8;color:#1a1a18;}
+.tab.active{background:#1a1a18;color:#fff;border-color:#1a1a18;font-weight:500;}
+.section{display:none;}.section.active{display:block;}
+.rrow{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8f7f4;border-radius:8px;border:1px solid #e8e6e0;margin-bottom:6px;flex-wrap:wrap;}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;}
+.rname{flex:1;font-size:14px;font-weight:500;color:#1a1a18;min-width:100px;}
+.cpill{font-size:11px;padding:2px 8px;border-radius:20px;white-space:nowrap;font-weight:500;}
+.tinput{width:110px;height:30px;font-size:13px;padding:0 8px;border:1px solid #d3d1c7;border-radius:8px;background:#fff;color:#1a1a18;flex-shrink:0;}
+.rtable{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;}
+.rtable th{text-align:left;font-size:11px;font-weight:600;color:#888780;padding:6px 8px;border-bottom:1px solid #e8e6e0;text-transform:uppercase;letter-spacing:.04em;}
+.rtable td{padding:9px 8px;border-bottom:1px solid #f1efe8;color:#1a1a18;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rtable tr:last-child td{border-bottom:none;}
+.rtable tr.r1 td{background:#faeeda55;}
+.rbadge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:600;}
+.m1{background:#ef9f27;color:#412402;}.m2{background:#b4b2a9;color:#2c2c2a;}.m3{background:#f09595;color:#501313;}.mn{background:#f1efe8;color:#888780;}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem;}
+.metric{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:12px;}
+.mlabel{font-size:11px;color:#888780;margin-bottom:4px;font-weight:500;}
+.mval{font-size:22px;font-weight:600;color:#1a1a18;}
+.cfrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.cpbtn{height:28px;padding:0 12px;font-size:12px;border-radius:20px;border:1px solid #d3d1c7;background:transparent;color:#5f5e5a;cursor:pointer;}
+.cpbtn.active{background:#1a1a18;color:#fff;border-color:#1a1a18;}
+.empty{text-align:center;padding:2.5rem;color:#888780;font-size:14px;}
+.chip{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.chip-exact{background:#e1f5ee;color:#0f6e56;}
+.chip-close1{background:#faeeda;color:#854f0b;}
+.chip-close2{background:#f1efe8;color:#5f5e5a;}
+.chip-time{background:#e6f1fb;color:#185fa5;}
+.chip-zero{background:#f1efe8;color:#888780;}
+.ptsbar{height:3px;border-radius:2px;background:#f1efe8;margin-top:5px;}
+.ptsbar-fill{height:3px;border-radius:2px;background:#ef9f27;}
+.scoring-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.score-block{background:#f8f7f4;border-radius:10px;padding:12px;}
+.score-block-title{font-size:11px;font-weight:600;color:#888780;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;}
+.score-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e8e6e0;font-size:13px;}
+.score-row:last-child{border-bottom:none;}
+.pred-list-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #f1efe8;}
+.pred-list-row:last-child{border-bottom:none;}
+.pred-status{font-size:12px;padding:2px 10px;border-radius:20px;white-space:nowrap;font-weight:500;}
+.pred-status.done{background:#e1f5ee;color:#0f6e56;}
+.pred-status.empty-s{background:#f1efe8;color:#888780;}
+.pred-status.locked{background:#eeedfe;color:#3c3489;}
+.lock-banner{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f8f7f4;border-radius:8px;margin-bottom:1rem;font-size:13px;color:#5f5e5a;border:1px solid #e8e6e0;}
+.private-card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px;}
+.private-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.podium-slot{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f1efe8;flex-wrap:wrap;}
+.podium-slot:last-of-type{border-bottom:none;}
+.pos-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;}
+.p1b{background:#ef9f27;color:#412402;}.p2b{background:#b4b2a9;color:#2c2c2a;}.p3b{background:#f09595;color:#501313;}.pnb{background:#f1efe8;color:#888780;border:1px solid #d3d1c7;}
+.slot-select{flex:1;height:32px;font-size:13px;min-width:120px;}
+.slot-time{width:96px;height:32px;font-size:12px;padding:0 8px;border:1px solid #d3d1c7;border-radius:8px;background:#f8f7f4;color:#1a1a18;flex-shrink:0;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #f1efe8;}
+.lb-row:last-child{border-bottom:none;}
+@media(max-width:500px){
+  .scoring-grid{grid-template-columns:1fr;}
+  .slot-time{width:88px;}
+  h1{font-size:20px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<h1><i class="ti ti-trail-sign"></i> Fantasy Trail Race</h1>
+<p class="sub">Register racers · Record times · Predict the podium · Crown the best forecaster</p>
+
+<div class="tab-row">
+  <button class="tab active" onclick="sw('setup')"><i class="ti ti-users"></i> Racers</button>
+  <button class="tab" onclick="sw('timing')"><i class="ti ti-clock"></i> Timing</button>
+  <button class="tab" onclick="sw('results')"><i class="ti ti-podium"></i> Results</button>
+  <button class="tab" onclick="sw('predict')"><i class="ti ti-heart"></i> Predict</button>
+  <button class="tab" onclick="sw('leaderboard')"><i class="ti ti-trophy"></i> Leaderboard</button>
+</div>
+
+<!-- RACERS -->
+<div id="tab-setup" class="section active">
+  <div class="card">
+    <p class="slabel">Add racer</p>
+    <div class="row" style="margin-bottom:8px;">
+      <input type="text" id="rn" placeholder="Full name"/>
+      <select id="rc" style="flex:0 1 150px;min-width:120px;">
+        <option>Open Men</option><option>Open Women</option>
+        <option>Masters M40+</option><option>Masters W40+</option>
+        <option>Junior U20</option><option>Elite</option>
+      </select>
+    </div>
+    <div class="row">
+      <input type="text" id="rb" placeholder="Bib #" style="max-width:70px;flex:0 0 70px;"/>
+      <input type="number" id="ritra" placeholder="ITRA points" min="0" max="1000" style="max-width:140px;flex:0 1 140px;"/>
+      <button class="btn primary" onclick="addRacer()" style="margin-left:auto;"><i class="ti ti-plus"></i> Add racer</button>
+    </div>
+  </div>
+  <div id="racers-list"></div>
+</div>
+
+<!-- TIMING -->
+<div id="tab-timing" class="section">
+  <div class="card" style="margin-bottom:1rem;">
+    <p class="slabel">Race info</p>
+    <div class="row">
+      <input type="text" id="race-name" placeholder="Race name (e.g. Mantra116 34K)"/>
+      <input type="text" id="race-dist" placeholder="Distance" style="max-width:120px;flex:0 1 120px;"/>
+    </div>
+  </div>
+  <div class="card"><p class="slabel">Finish times</p><div id="timing-list"></div></div>
+</div>
+
+<!-- RESULTS -->
+<div id="tab-results" class="section">
+  <div class="mgrid" id="mgrid"></div>
+  <div class="cfrow" id="cfrow"></div>
+  <div class="card" style="overflow-x:auto;">
+    <table class="rtable">
+      <thead><tr>
+        <th style="width:36px">Rank</th><th style="width:130px">Racer</th>
+        <th style="width:36px">Bib</th><th style="width:95px">Category</th>
+        <th style="width:50px">ITRA</th><th style="width:78px">Time</th>
+        <th style="width:55px">Gap</th><th style="width:48px">Cat.</th>
+      </tr></thead>
+      <tbody id="rtbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PREDICT -->
+<div id="tab-predict" class="section">
+  <div id="predict-content"></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="tab-leaderboard" class="section">
+  <div class="mgrid" id="lb-mgrid"></div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:10px 14px;border-bottom:1px solid #e8e6e0;">
+      <span class="slabel" style="margin-bottom:0">Prediction leaderboard</span>
+    </div>
+    <div id="lb-list"></div>
+  </div>
+</div>
+</div>
+
+<script>
+const COLS=[{bg:'#EEEDFE',tx:'#3C3489'},{bg:'#E1F5EE',tx:'#0F6E56'},{bg:'#FAECE7',tx:'#993C1D'},{bg:'#FBEAF0',tx:'#993556'},{bg:'#E6F1FB',tx:'#185FA5'},{bg:'#EAF3DE',tx:'#3B6D11'},{bg:'#FAEEDA',tx:'#854F0B'}];
+let racers=[],times={},predictors=[],activeCF='All',activePredictor=null;
+const POS_PTS=[10,5,2];
+const TIME_TIERS=[{secs:60,pts:15},{secs:300,pts:8},{secs:900,pts:3}];
+
+function cc(cat){const cats=[...new Set(racers.map(r=>r.category))];return COLS[cats.indexOf(cat)%COLS.length]||COLS[0];}
+function ini(n){return n.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);}
+function posLabel(i){return['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'][i]||(i+1)+'th';}
+function posCls(i){return i===0?'p1b':i===1?'p2b':i===2?'p3b':'pnb';}
+
+function sw(tab){
+  const names=['setup','timing','results','predict','leaderboard'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===tab));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='timing')renderTiming();
+  if(tab==='results')renderResults();
+  if(tab==='predict')renderPredictTab();
+  if(tab==='leaderboard')renderLeaderboard();
+}
+
+function addRacer(){
+  const name=document.getElementById('rn').value.trim();if(!name)return;
+  const cat=document.getElementById('rc').value;
+  const bib=document.getElementById('rb').value.trim()||String(racers.length+1);
+  const itra=parseInt(document.getElementById('ritra').value)||null;
+  racers.push({id:Date.now(),name,category:cat,bib,itra});
+  document.getElementById('rn').value='';document.getElementById('rb').value='';document.getElementById('ritra').value='';
+  renderRacers();
+}
+function removeRacer(id){racers=racers.filter(r=>r.id!==id);delete times[id];renderRacers();}
+
+function itraLabel(pts){
+  if(!pts)return null;
+  if(pts>=800)return{label:'Elite',bg:'#EEEDFE',tx:'#3C3489'};
+  if(pts>=600)return{label:'Expert',bg:'#E1F5EE',tx:'#0F6E56'};
+  if(pts>=400)return{label:'Advanced',bg:'#E6F1FB',tx:'#185FA5'};
+  if(pts>=200)return{label:'Experienced',bg:'#FAEEDA',tx:'#854F0B'};
+  return{label:'Finisher',bg:'#F1EFE8',tx:'#5F5E5A'};
+}
+
+function renderRacers(){
+  const el=document.getElementById('racers-list');
+  if(!racers.length){el.innerHTML='<div class="empty"><i class="ti ti-user-plus" style="font-size:28px;display:block;margin-bottom:8px"></i>No racers yet. Add one above.</div>';return;}
+  el.innerHTML=racers.map(r=>{
+    const c=cc(r.category);const il=itraLabel(r.itra);
+    const ib=il?`<span class="cpill" style="background:${il.bg};color:${il.tx}">${r.itra} · ${il.label}</span>`:'';
+    return`<div class="rrow"><div class="av" style="background:${c.bg};color:${c.tx}">${ini(r.name)}</div><span class="rname">${r.name}</span><span class="cpill" style="background:${c.bg};color:${c.tx}">${r.category}</span>${ib}<span style="font-size:12px;color:#888780;flex-shrink:0">Bib ${r.bib}</span><button class="btn danger" style="height:28px;padding:0 10px;font-size:12px;flex-shrink:0" onclick="removeRacer(${r.id})"><i class="ti ti-trash"></i></button></div>`;
+  }).join('');
+}
+
+function renderTiming(){
+  const el=document.getElementById('timing-list');
+  if(!racers.length){el.innerHTML='<div class="empty">Add racers first.</div>';return;}
+  el.innerHTML=[...racers].sort((a,b)=>a.bib.localeCompare(b.bib,undefined,{numeric:true})).map(r=>{
+    const c=cc(r.category);const val=times[r.id]||'';
+    return`<div class="rrow"><div class="av" style="background:${c.bg};color:${c.tx};font-size:11px">${r.bib}</div><span class="rname">${r.name}</span><span class="cpill" style="background:${c.bg};color:${c.tx}">${r.category}</span><input type="text" class="tinput" placeholder="HH:MM:SS" value="${val}" oninput="times[${r.id}]=this.value"/><button class="btn" style="height:28px;padding:0 8px;font-size:12px;flex-shrink:0" onclick="times[${r.id}]='DNF';this.previousElementSibling.value='DNF'">DNF</button></div>`;
+  }).join('');
+}
+
+function pt(t){if(!t||t==='DNF')return null;const p=t.split(':').map(Number);if(p.length===3)return p[0]*3600+p[1]*60+p[2];if(p.length===2)return p[0]*60+p[1];return null;}
+function fd(s){if(s===0)return'—';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;if(h>0)return`+${h}:${String(m).padStart(2,'0')}:${String(sc).padStart(2,'0')}`;return`+${m}:${String(sc).padStart(2,'0')}`;}
+function fmtSecs(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;if(h>0)return`${h}:${String(m).padStart(2,'0')}:${String(sc).padStart(2,'0')}`;return`${m}:${String(sc).padStart(2,'0')}`;}
+function getFinished(){return racers.filter(r=>times[r.id]&&times[r.id]!=='DNF'&&pt(times[r.id])!==null).sort((a,b)=>pt(times[a.id])-pt(times[b.id]));}
+
+function renderResults(){
+  const cats=['All',...new Set(racers.map(r=>r.category))];
+  document.getElementById('cfrow').innerHTML=cats.map(c=>`<button class="cpbtn${c===activeCF?' active':''}" onclick="activeCF='${c}';renderResults()">${c}</button>`).join('');
+  const fin=getFinished();const dnf=racers.filter(r=>times[r.id]==='DNF');const dns=racers.filter(r=>!times[r.id]);
+  document.getElementById('mgrid').innerHTML=`<div class="metric"><div class="mlabel">Total racers</div><div class="mval">${racers.length}</div></div><div class="metric"><div class="mlabel">Finished</div><div class="mval">${fin.length}</div></div><div class="metric"><div class="mlabel">Leader time</div><div class="mval" style="font-size:16px">${fin.length?times[fin[0].id]:'—'}</div></div><div class="metric"><div class="mlabel">Categories</div><div class="mval">${cats.length-1}</div></div>`;
+  const cr={};fin.forEach(r=>{if(!cr[r.category])cr[r.category]=0;cr[r.category]++;r._cr=cr[r.category];});
+  const filtered=activeCF==='All'?fin:fin.filter(r=>r.category===activeCF);
+  const tbody=document.getElementById('rtbody');
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="8" class="empty">No finish times recorded yet.</td></tr>`;return;}
+  const lead=pt(times[filtered[0].id]);
+  tbody.innerHTML=filtered.map((r,i)=>{
+    const rank=i+1,c=cc(r.category),diff=pt(times[r.id])-lead;
+    const mc=rank===1?'m1':rank===2?'m2':rank===3?'m3':'mn';
+    const itraCell=r.itra?`<span style="font-size:12px;font-weight:600;color:#3C3489">${r.itra}</span>`:'<span style="color:#888780">—</span>';
+    return`<tr class="${rank===1?'r1':''}"><td><span class="rbadge ${mc}">${rank}</span></td><td><div style="display:flex;align-items:center;gap:6px"><div class="av" style="background:${c.bg};color:${c.tx};width:22px;height:22px;font-size:10px">${ini(r.name)}</div>${r.name}</div></td><td style="color:#888780">${r.bib}</td><td><span class="cpill" style="background:${c.bg};color:${c.tx}">${r.category}</span></td><td>${itraCell}</td><td style="font-weight:600">${times[r.id]}</td><td style="color:#888780;font-size:12px">${fd(diff)}</td><td><span class="rbadge ${r._cr===1?'m1':r._cr===2?'m2':r._cr===3?'m3':'mn'}">${r._cr}</span></td></tr>`;
+  }).join('');
+  if(dnf.length)tbody.innerHTML+=`<tr><td colspan="8" style="padding:6px 8px;font-size:12px;color:#888780">DNF: ${dnf.map(r=>r.name).join(', ')}</td></tr>`;
+  if(dns.length)tbody.innerHTML+=`<tr><td colspan="8" style="padding:6px 8px;font-size:12px;color:#888780">DNS: ${dns.map(r=>r.name).join(', ')}</td></tr>`;
+}
+
+function calcTimePts(g,a){
+  const gv=pt(g),av=pt(a);if(gv===null||av===null)return{pts:0,diff:null};
+  const diff=Math.abs(gv-av);
+  for(const t of TIME_TIERS){if(diff<=t.secs)return{pts:t.pts,diff};}return{pts:0,diff};
+}
+function calcScore(pred){
+  const fin=getFinished();let posPts=0,timePts=0;const detail=[];
+  for(let i=0;i<racers.length;i++){
+    const pick=pred.picks[i]||{racerId:null,guessTime:''};
+    const rid=pick.racerId;const gt=pick.guessTime||'';
+    if(!rid){detail.push({posPts:0,timePts:0,posStatus:'empty',timeDiff:null});continue;}
+    const actualRank=fin.findIndex(r=>r.id===rid);
+    let pp=0,posStatus='none';
+    if(actualRank>=0){const d=Math.abs(actualRank-i);if(d===0){pp=POS_PTS[0];posStatus='exact';}else if(d===1){pp=POS_PTS[1];posStatus='close1';}else if(d===2){pp=POS_PTS[2];posStatus='close2';}}
+    posPts+=pp;
+    let tp=0,timeDiff=null;
+    if(actualRank>=0&&gt){const tr=calcTimePts(gt,times[fin[actualRank].id]);tp=tr.pts;timeDiff=tr.diff;}
+    timePts+=tp;detail.push({posPts:pp,timePts:tp,posStatus,timeDiff});
+  }
+  return{total:posPts+timePts,posPts,timePts,detail};
+}
+
+function setPick(slot,field,val){
+  if(!activePredictor)return;
+  if(!activePredictor.picks[slot])activePredictor.picks[slot]={racerId:null,guessTime:''};
+  if(field==='racer')activePredictor.picks[slot].racerId=val?parseInt(val)||null:null;
+  if(field==='time')activePredictor.picks[slot].guessTime=val;
+  updateActiveScore();
+}
+function updateActiveScore(){
+  if(!activePredictor)return;
+  const{total,posPts,timePts}=calcScore(activePredictor);
+  const el=document.getElementById('active-score');
+  const fin=getFinished();
+  if(el)el.innerHTML=`<span style="font-size:26px;font-weight:700;color:#1a1a18">${total}</span><span style="font-size:13px;color:#888780;margin-left:4px">pts</span>${fin.length>0?`<span style="font-size:12px;color:#888780;margin-left:10px">${posPts} pos + ${timePts} time</span>`:''}`;
+}
+
+function addPredictor(){
+  const name=document.getElementById('pred-name-input').value.trim();if(!name)return;
+  predictors.push({id:Date.now(),name,picks:[]});
+  document.getElementById('pred-name-input').value='';
+  renderPredictTab();
+}
+function deletePredictor(id){
+  if(!confirm('Remove this predictor and all their picks?'))return;
+  predictors=predictors.filter(p=>p.id!==id);
+  renderPredictTab();
+}
+function enterAsPredictor(id){
+  activePredictor=predictors.find(p=>p.id===id);
+  if(!activePredictor)return;
+  renderPredictTab();
+}
+function savePicks(){activePredictor=null;renderPredictTab();}
+
+function renderPredictTab(){
+  const el=document.getElementById('predict-content');
+  if(activePredictor){renderActiveEntry(el);return;}
+  renderPredictHome(el);
+}
+
+function renderPredictHome(el){
+  const predRows=predictors.length?predictors.map(p=>{
+    const hasPicks=p.picks.some(pk=>pk&&pk.racerId);
+    const{total}=calcScore(p);
+    const fin=getFinished();
+    const statusHtml=fin.length>0&&hasPicks
+      ?`<span class="pred-status done"><i class="ti ti-check" style="font-size:11px"></i> ${total} pts</span>`
+      :hasPicks?`<span class="pred-status locked"><i class="ti ti-lock" style="font-size:11px"></i> Submitted</span>`
+      :`<span class="pred-status empty-s">No picks yet</span>`;
+    return`<div class="pred-list-row"><div class="av" style="background:#EEEDFE;color:#3C3489;width:30px;height:30px;font-size:11px">${ini(p.name)}</div><span style="flex:1;font-size:14px;font-weight:500;color:#1a1a18">${p.name}</span>${statusHtml}<button class="btn" style="height:30px;padding:0 12px;font-size:12px" onclick="enterAsPredictor(${p.id})"><i class="ti ti-pencil"></i> Enter</button><button class="btn danger" style="height:30px;padding:0 8px;font-size:12px;margin-left:4px" onclick="deletePredictor(${p.id})"><i class="ti ti-trash"></i></button></div>`;
+  }).join('')
+  :`<div class="empty" style="padding:1.5rem">No predictors yet. Add one above.</div>`;
+
+  el.innerHTML=`
+  <div class="scoring-grid">
+    <div class="score-block">
+      <div class="score-block-title"><i class="ti ti-podium"></i> Position points</div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">Exact position</span><span style="font-weight:600;font-size:13px">10 pts</span></div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">1 spot off</span><span style="font-weight:600;font-size:13px">5 pts</span></div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">2 spots off</span><span style="font-weight:600;font-size:13px">2 pts</span></div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">3+ spots off</span><span style="font-weight:600;font-size:13px">0 pts</span></div>
+    </div>
+    <div class="score-block">
+      <div class="score-block-title"><i class="ti ti-clock"></i> Time bonus</div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">Within 1 min</span><span style="font-weight:600;font-size:13px">+15 pts</span></div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">Within 5 min</span><span style="font-weight:600;font-size:13px">+8 pts</span></div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">Within 15 min</span><span style="font-weight:600;font-size:13px">+3 pts</span></div>
+      <div class="score-row"><span style="color:#5f5e5a;font-size:13px">Over 15 min</span><span style="font-weight:600;font-size:13px">0 pts</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:1rem;">
+    <p class="slabel" style="margin-bottom:8px">Add a predictor</p>
+    <div class="row">
+      <input type="text" id="pred-name-input" placeholder="Name (spectator, friend…)"/>
+      <button class="btn primary" onclick="addPredictor()"><i class="ti ti-plus"></i> Add</button>
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:10px 14px;border-bottom:1px solid #e8e6e0;display:flex;align-items:center;justify-content:space-between;">
+      <span class="slabel" style="margin-bottom:0">Predictors</span>
+      <span style="font-size:12px;color:#888780">${predictors.length} total</span>
+    </div>
+    ${predRows}
+  </div>`;
+}
+
+function renderActiveEntry(el){
+  if(!racers.length){el.innerHTML='<div class="empty">Add racers in the Racers tab first.</div>';return;}
+  const pred=activePredictor;
+  const fin=getFinished();
+  const hasResults=fin.length>0;
+  const sortedRacers=[...racers].sort((a,b)=>(b.itra||0)-(a.itra||0));
+  const racerOpts=['<option value="">— pick a racer —</option>',...sortedRacers.map(r=>`<option value="${r.id}">${r.name}${r.itra?` · ${r.itra} ITRA`:''} (Bib ${r.bib})</option>`)].join('');
+  const{total,posPts,timePts,detail}=calcScore(pred);
+
+  const slotsHtml=racers.map((_,i)=>{
+    const pick=pred.picks[i]||{racerId:null,guessTime:''};
+    const d=detail[i]||{posPts:0,timePts:0,posStatus:'none',timeDiff:null};
+    let posChip='',timeChip='';
+    if(hasResults&&pick.racerId){
+      if(d.posStatus==='exact')posChip=`<span class="chip chip-exact">+10 exact!</span>`;
+      else if(d.posStatus==='close1')posChip=`<span class="chip chip-close1">+5 close</span>`;
+      else if(d.posStatus==='close2')posChip=`<span class="chip chip-close2">+2</span>`;
+      else posChip=`<span class="chip chip-zero">0</span>`;
+      if(pick.guessTime){
+        if(d.timePts>=15)timeChip=`<span class="chip chip-time">+15 time!</span>`;
+        else if(d.timePts>=8)timeChip=`<span class="chip chip-time">+8 time</span>`;
+        else if(d.timePts>=3)timeChip=`<span class="chip chip-time">+3 time</span>`;
+        else{const ds=d.timeDiff!==null?` (${fmtSecs(d.timeDiff)} off)`:'';timeChip=`<span class="chip chip-zero">0 time${ds}</span>`;}
+      }
+    }
+    return`<div class="podium-slot"><div class="pos-badge ${posCls(i)}">${posLabel(i)}</div><select class="slot-select" onchange="setPick(${i},'racer',this.value)" data-slot="${i}">${racerOpts}</select><input type="text" class="slot-time" placeholder="HH:MM:SS" value="${pick.guessTime||''}" oninput="setPick(${i},'time',this.value)" title="Predicted finish time (optional bonus)"/><div style="display:flex;gap:4px;flex-wrap:wrap">${posChip}${timeChip}</div></div>`;
+  }).join('');
+
+  el.innerHTML=`
+  <div class="lock-banner"><i class="ti ti-lock" style="font-size:16px;color:#3C3489"></i><span>Private entry for <strong>${pred.name}</strong> — only you can see this screen.</span></div>
+  <div class="private-card">
+    <div class="private-header">
+      <div class="av" style="background:#EEEDFE;color:#3C3489;width:40px;height:40px;font-size:14px">${ini(pred.name)}</div>
+      <div style="flex:1"><div style="font-size:16px;font-weight:600;color:#1a1a18">${pred.name}</div><div style="font-size:12px;color:#888780">Your picks are private until results are in</div></div>
+      <div id="active-score" style="text-align:right"></div>
+    </div>
+    <div style="font-size:11px;color:#888780;margin-bottom:12px"><i class="ti ti-podium"></i> Pick a racer for each finishing position &nbsp;·&nbsp; <i class="ti ti-clock"></i> Predict their finish time for a bonus (optional)</div>
+    ${slotsHtml}
+    <div style="display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid #f1efe8;">
+      <button class="btn primary" onclick="savePicks()" style="flex:1"><i class="ti ti-check"></i> Save &amp; lock picks</button>
+      <button class="btn" onclick="savePicks()"><i class="ti ti-x"></i> Cancel</button>
+    </div>
+  </div>`;
+
+  setTimeout(()=>{
+    pred.picks.forEach((pick,i)=>{
+      if(!pick||!pick.racerId)return;
+      const sel=document.querySelector(`select[data-slot="${i}"]`);
+      if(sel)sel.value=pick.racerId;
+    });
+    updateActiveScore();
+  },10);
+}
+
+function renderLeaderboard(){
+  const scored=predictors.map(p=>({...p,...calcScore(p)})).sort((a,b)=>b.total-a.total);
+  const fin=getFinished();
+  const maxPossible=racers.length*(POS_PTS[0]+TIME_TIERS[0].pts);
+  document.getElementById('lb-mgrid').innerHTML=`<div class="metric"><div class="mlabel">Predictors</div><div class="mval">${predictors.length}</div></div><div class="metric"><div class="mlabel">Top score</div><div class="mval">${scored.length?scored[0].total:0}</div></div><div class="metric"><div class="mlabel">Race done</div><div class="mval" style="font-size:16px">${fin.length}/${racers.length}</div></div><div class="metric"><div class="mlabel">Max possible</div><div class="mval">${maxPossible}</div></div>`;
+  const el=document.getElementById('lb-list');
+  if(!scored.length){el.innerHTML='<div class="empty">No predictors yet.</div>';return;}
+  const topPts=scored[0].total||1;
+  el.innerHTML=scored.map((p,i)=>{
+    const rank=i+1;const mc=rank===1?'m1':rank===2?'m2':rank===3?'m3':'mn';
+    const bar=Math.round((p.total/topPts)*100);
+    const exactPos=p.detail.filter(d=>d.posStatus==='exact').length;
+    const chips=[exactPos>0?`<span class="chip chip-exact">${exactPos} exact hit${exactPos>1?'s':''}</span>`:'',p.timePts>0?`<span class="chip chip-time">+${p.timePts} time bonus</span>`:''].filter(Boolean).join('');
+    const topPicks=p.picks.slice(0,3).map((pick,si)=>{if(!pick||!pick.racerId)return null;const r=racers.find(x=>x.id===pick.racerId);return r?`${posLabel(si)}: ${r.name.split(' ')[0]}`:null;}).filter(Boolean).join(' · ')||'No picks yet';
+    return`<div class="lb-row"><span class="rbadge ${mc}" style="width:28px;height:28px;font-size:13px;flex-shrink:0">${rank}</span><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px"><div class="av" style="background:#EEEDFE;color:#3C3489;width:26px;height:26px;font-size:10px">${ini(p.name)}</div><div style="min-width:0"><div style="font-size:14px;font-weight:600;color:#1a1a18">${p.name}</div><div style="font-size:11px;color:#888780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${fin.length>0?topPicks:'Picks hidden until results are in'}</div></div></div>${chips?`<div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">${chips}</div>`:''}<div class="ptsbar"><div class="ptsbar-fill" style="width:${bar}%"></div></div></div><div style="text-align:right;padding-left:12px;flex-shrink:0"><div style="font-size:22px;font-weight:700;color:#1a1a18">${fin.length>0?p.total:'—'}</div><div style="font-size:11px;color:#888780">pts</div><div style="font-size:11px;color:#888780;margin-top:2px">${fin.length>0?`${p.posPts} pos + ${p.timePts} time`:''}</div></div></div>`;
+  }).join('');
+}
+
+renderRacers();
+</script>
+</body>
+</html>
